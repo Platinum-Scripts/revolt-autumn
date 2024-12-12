@@ -30,6 +30,8 @@ pub struct Tag {
     pub serve_if_field_present: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub restrict_content_type: Option<ContentType>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allowed_mime_types: Option<Vec<String>>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

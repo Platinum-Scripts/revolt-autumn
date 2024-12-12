@@ -63,8 +63,10 @@ pub async fn post(req: HttpRequest, mut payload: Multipart) -> Result<HttpRespon
         let mut content_type = tree_magic::from_u8(&buf);
 
         // if content type is found and is not allowed as determined by tag.allowed_mime_types, return an error
-        if !tag.allowed_mime_types.is_empty() && !tag.allowed_mime_types.contains(&content_type) {
-            return Err(Error::ContentTypeNotAllowed);
+        if let Some(allowed_types) = &tag.allowed_mime_types {
+            if !allowed_types.is_empty() && !allowed_types.contains(&content_type) {
+                return Err(Error::ContentTypeNotAllowed);
+            }
         }
 
         // Intercept known file extensions with certain content types
