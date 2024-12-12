@@ -65,15 +65,6 @@ pub async fn post(req: HttpRequest, mut payload: Multipart) -> Result<HttpRespon
         // ? Find the content-type of the data.
         let mut content_type = tree_magic::from_u8(&buf);
 
-        // if content type is found and is not allowed as determined by tag.allowed_mime_types, return an error
-        if let Some(allowed_types) = &tag.allowed_mime_types {
-            if !allowed_types.is_empty() && !allowed_types.contains(&content_type) {
-                // log to console a warning and return an error
-                log::warn!("Content type not allowed: {}", content_type);
-                return Err(Error::ContentTypeNotAllowed);
-            }
-        }
-
         // Intercept known file extensions with certain content types
         if content_type == "application/zip" && filename.to_lowercase().ends_with(".apk") {
             content_type = "application/vnd.android.package-archive".to_string();
