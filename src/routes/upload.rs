@@ -51,6 +51,9 @@ pub async fn post(req: HttpRequest, mut payload: Multipart) -> Result<HttpRespon
             file_size += data.len();
 
             if file_size > tag.max_size {
+                // log to console a warning and return an error
+                log::warn!("File too large: {}", file_size);
+
                 return Err(Error::FileTooLarge {
                     max_size: tag.max_size,
                 });
@@ -65,6 +68,8 @@ pub async fn post(req: HttpRequest, mut payload: Multipart) -> Result<HttpRespon
         // if content type is found and is not allowed as determined by tag.allowed_mime_types, return an error
         if let Some(allowed_types) = &tag.allowed_mime_types {
             if !allowed_types.is_empty() && !allowed_types.contains(&content_type) {
+                // log to console a warning and return an error
+                log::warn!("Content type not allowed: {}", content_type);
                 return Err(Error::ContentTypeNotAllowed);
             }
         }
