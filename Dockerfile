@@ -14,6 +14,6 @@ FROM debian:bullseye-slim
 RUN apt-get update && apt-get install -y ca-certificates ffmpeg
 COPY --from=builder /usr/local/cargo/bin/autumn ./
 EXPOSE 3000
-ENV AUTUMN_HOST 0.0.0.0:3000
+ENV AUTUMN_HOST = 0.0.0.0:3000
 COPY Autumn.toml ./
 CMD ["./autumn"]
